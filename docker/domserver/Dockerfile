@@ -3,6 +3,8 @@ LABEL org.opencontainers.image.authors="DOMjudge team <team@domjudge.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+SHELL ["/bin/bash", "-l", "-c"]
+
 # Install required packages for build of domserver
 RUN apt update \
 	&& apt install --no-install-recommends --no-install-suggests -y \
@@ -21,6 +23,8 @@ RUN apt update \
 
 # Use venv to install latest Sphinx. 6.1.0 or higher is required to build DOMjudge docs.
 RUN python3 -m venv /venv && . /venv/bin/activate && pip3 install sphinx sphinx-rtd-theme rst2pdf
+
+RUN echo ". /venv/bin/activate" > /etc/profile.d/venv-activate.sh
 
 # Set up user
 RUN useradd -m domjudge
